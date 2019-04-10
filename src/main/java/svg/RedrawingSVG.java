@@ -13,10 +13,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.MalformedURLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -32,7 +29,7 @@ public class RedrawingSVG extends JFrame {
     public void drawSvg() throws MalformedURLException, InterruptedException, FileNotFoundException, UnsupportedEncodingException, SVGGraphics2DIOException {
         final JSVGCanvas canvas = new JSVGCanvas();
         canvas.setDocumentState(JSVGCanvas.ALWAYS_DYNAMIC); // to update it
-        canvas.setURI(new File("/home/ekuntsevich/Downloads/img.svg").toURI().toURL().toString());
+        canvas.setURI(new File("/home/INTEXSOFT/eugene.kuntsevich/Downloads/img.svg").toURI().toURL().toString());
 
         canvas.addGVTTreeBuilderListener(new GVTTreeBuilderAdapter() {
             public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
@@ -56,25 +53,33 @@ public class RedrawingSVG extends JFrame {
             }
         }
         Document doc = canvas.getSVGDocument();
+        doc.setDocumentURI("http://www.w3.org/2000/svg");
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
-        Shape circle = new Ellipse2D.Double(50, 50, 250, 250);
+        Shape circle = new Ellipse2D.Double(50, 50, 1000, 1000);
         g.setPaint(Color.red);
+        g.setStroke(new BasicStroke(25));
         g.draw(circle);
 
         Element root = doc.getDocumentElement();
         g.getRoot(root);
 
-        Writer out;
+        /*Writer out;
         try {
-            out = new OutputStreamWriter(new FileOutputStream(new File("img2.svg")), "UTF-8");
-            g.stream(out);
+            OutputStream outputStream = new FileOutputStream(new File("img2.svg"));
+            out = new OutputStreamWriter(outputStream, "UTF-8");
+            g.stream(out, true);
+            outputStream.flush();
+            outputStream.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (SVGGraphics2DIOException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+       // System.exit(0);*/
     }
 }
